@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // 用戶表
@@ -47,13 +47,16 @@ model Event {
   id        String   @id @default(cuid())
   type      String
   source    String
-  data      Json
+  data      String
   status    String   @default("pending") // pending, processing, completed, failed
   retries   Int      @default(0)
   error     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   processedAt DateTime?
+
+  // 關聯
+  logs EventLog[]
 
   @@map("events")
 }
@@ -106,7 +109,7 @@ model Shop {
   shoplineId String  @unique
   name      String
   domain    String
-  data      Json
+  data      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
