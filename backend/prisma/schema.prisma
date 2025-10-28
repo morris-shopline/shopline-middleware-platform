@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// 用戶表
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 關聯
+  tokens ShoplineToken[]
+
+  @@map("users")
+}
+
+// Shopline Token 表
+model ShoplineToken {
+  id           String   @id @default(cuid())
+  userId       String
+  accessToken  String
+  refreshToken String
+  expiresAt    DateTime
+  shopHandle   String?
+  scope        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // 關聯
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("shopline_tokens")
+}
+
+// 事件表
+model Event {
+  id        String   @id @default(cuid())
+  type      String
+  source    String
+  data      Json
+  status    String   @default("pending") // pending, processing, completed, failed
+  retries   Int      @default(0)
+  error     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  processedAt DateTime?
+
+  @@map("events")
+}
+
+// 事件處理日誌表
+model EventLog {
+  id        String   @id @default(cuid())
+  eventId   String
+  status    String   // processing, completed, failed
+  message   String?
+  error     String?
+  createdAt DateTime @default(now())
+
+  // 關聯
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@map("event_logs")
+}
+
+// 商品表
+model Product {
+  id          String   @id @default(cuid())
+  shoplineId  String   @unique
+  handle      String
+  title       String
+  status      String
+  data        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("products")
+}
+
+// 訂單表
+model Order {
+  id          String   @id @default(cuid())
+  shoplineId  String   @unique
+  orderNumber String
+  status      String
+  data        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("orders")
+}
+
+// 商店資訊表
+model Shop {
+  id        String   @id @default(cuid())
+  shoplineId String  @unique
+  name      String
+  domain    String
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("shops")
+}
+
+// 系統設定表
+model SystemConfig {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_configs")
+}
