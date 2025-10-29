@@ -20,12 +20,12 @@ async function registerMiddleware() {
 // 註冊路由
 async function registerRoutes() {
   // Health check
-  fastify.get('/health', async (request, reply) => {
+  fastify.get('/health', async (_request, _reply) => {
     return { status: 'ok', timestamp: new Date().toISOString() }
   })
 
   // API routes
-  fastify.get('/api/status', async (request, reply) => {
+  fastify.get('/api/status', async (_request, _reply) => {
     return { 
       message: 'Shopline Middleware Platform API',
       version: '1.0.0',
