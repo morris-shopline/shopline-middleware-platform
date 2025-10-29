@@ -1,5 +1,5 @@
 // API 客戶端配置
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
 // 環境檢測
 const isDevelopment = process.env.NODE_ENV === 'development'
