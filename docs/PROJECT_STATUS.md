@@ -1,9 +1,9 @@
 # 專案現況 (Project Status)
 
-**最後更新**: 2025-01-27  
-**當前階段**: 前後端分離架構完成，準備部署  
-**架構版本**: Event-Driven V3.0 → 前後端分離架構 (Fastify + Next.js)  
-**運作狀態**: ✅ 本地測試完成 + 🚀 準備生產環境部署  
+**最後更新**: 2025-10-29  
+**當前階段**: 🎉 里程碑 1 完成 - 前後端分離架構部署成功  
+**架構版本**: 前後端分離架構 v4.0 (Fastify + Next.js)  
+**運作狀態**: ✅ 生產環境部署成功 + 🚀 準備 MVP 功能開發  
 **新帳戶**: GitHub: morris-shopline, Vercel: morris-shoplines-projects  
 **🚨 重要決策**: 只推送前後端分離架構，不推送舊專案檔案 (詳見 CRITICAL_DECISIONS.md)
 
@@ -27,40 +27,38 @@
 
 ## ✅ 當前運作中的功能
 
-### Shopline OAuth
-- ✅ 安裝授權流程 (`/oauth/install`)
-- ✅ OAuth 回調處理 (`/oauth/callback`)
-- ✅ Token 儲存 (PostgreSQL)
-- ✅ Token 刷新機制
+### 🎉 里程碑 1 完成 (2025-10-29)
+**前後端分離架構部署成功**
 
-### Shopline API (已整合 Event Bus)
-- ✅ 商店資訊查詢 (`GET /api/test/shop`) → 自動發佈 `shop.updated` 事件
-- ✅ 商品列表查詢 (`GET /api/test/products`) → 自動發佈 `product.updated` 事件  
-- ✅ 商品建立 (`POST /api/test/products`) → 自動發佈 `product.created` 事件
-- ✅ 訂單建立 (`POST /api/test/orders/create`) → 自動發佈 `order.created` 事件
-- ✅ 訂單列表查詢 (`GET /api/test/orders/list`) → 自動發佈 `order.updated` 事件
-- ✅ 訂單詳情查詢 (`GET /api/test/orders/:id`)
-- ✅ 訂單更新 (`PUT /api/test/orders/:id`)
+#### 部署狀態
+- ✅ **前端**: Next.js 部署於 Vercel
+  - URL: https://shopline-middleware-platform.vercel.app
+  - 狀態: 正常運行，環境變數配置正確
+- ✅ **後端**: Fastify + TypeScript 部署於 Render
+  - URL: https://shopline-middleware-platform.onrender.com
+  - 狀態: 正常運行，健康檢查通過
+- ✅ **資料庫**: PostgreSQL 部署於 Render
+  - 狀態: 已遷移，Prisma schema 已推送
+- ✅ **快取**: Redis 部署於 Render
+  - 狀態: 已設定
 
-### 部署環境
-- ✅ Local: Express Server (http://localhost:3000)
-- ✅ Production: Vercel Serverless Functions
-- ✅ Database: Prisma Postgres (Vercel)
+#### 基礎 API 端點
+- ✅ `GET /health` - 健康檢查 (後端)
+- ✅ `GET /api/status` - API 狀態 (後端)
+- ✅ `GET /` - 前端 UI (Vercel)
 
-### Event Bus 系統
-- ✅ Event Bus 核心 (`core/event-bus/`)
-- ✅ Standard Events 定義 (`core/events/`)
-- ✅ Shopline Source Connector (`connectors/shopline/source/`)
-- ✅ 雙寫模式 (Dual-Write) - 現有 API 正常運作 + 自動發佈事件
-- ✅ Event Monitor Dashboard (`/event-monitor`) - 即時監控事件流
-- ✅ 事件持久化 (PostgreSQL `events` 表)
+#### 技術架構
+- ✅ **前端**: Next.js + TypeScript (Vercel)
+- ✅ **後端**: Fastify + TypeScript (Render)
+- ✅ **資料庫**: PostgreSQL + Prisma ORM (Render)
+- ✅ **快取**: Redis (Render)
+- ✅ **認證**: 準備實作 JWT + Shopline OAuth
 
-### 前端 UI
-- ✅ 授權按鈕
-- ✅ 商店資訊查詢
-- ✅ 商品列表查詢
-- ✅ Event Monitor Dashboard 連結
-- ✅ 訂單建立測試
+### 🔄 準備開發 (MVP 功能)
+- 🔄 **Admin 首頁** - Event 監測和 Connector 管理
+- 🔄 **Shopline OAuth 2.0** - 授權流程和 Token 管理
+- 🔄 **Webhook 管理** - 事件接收和處理
+- 🔄 **API 測試區塊** - Shopline API 測試功能
 
 ---
 

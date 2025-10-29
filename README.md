@@ -4,13 +4,13 @@
 > 
 > 作為中介層（Middleman）整合電商平台（Shopline）與 OMS（Next Engine）
 > 
-> **新架構**: 前後端分離，前端部署於 Vercel，後端部署於 Render
+> **✅ 里程碑 1 完成**: 前後端分離架構部署成功
 
 ## 🎯 專案願景
 
 建立一個 **Event-Driven 的多平台 Connector 系統**，支援：
-- **Shopline** (電商平台) - ✅ 已整合 + Event Bus
-- **Next Engine** (OMS 訂單管理) - 🔄 整合中
+- **Shopline** (電商平台) - 🔄 準備整合
+- **Next Engine** (OMS 訂單管理) - 🔄 準備整合
 - **未來**: Shopify, WooCommerce, 其他平台
 
 ### 核心能力
@@ -51,25 +51,34 @@
 
 ## ✅ 當前狀態
 
-### 運作中的功能
-- ✅ Shopline OAuth 2.0 授權
-- ✅ 商店資訊查詢
-- ✅ 商品 CRUD
-- ✅ 訂單 CRUD (Create, Read, Update)
-- ✅ Vercel 部署 (Serverless + PostgreSQL)
-- ✅ Event-Driven 核心 (Phase R1 完成)
+### 🎉 里程碑 1 完成 (2025-10-29)
+**前後端分離架構部署成功** ✅
 
-### 當前階段
-**Phase R1 已完成** ✅ (2025-10-23)
-- Event Bus 核心建立完成
-- 35 個測試全部通過 (100%)
-- 現有功能完全正常
+#### 部署狀態
+- ✅ **前端**: Next.js 部署於 Vercel
+  - URL: https://shopline-middleware-platform.vercel.app
+  - 狀態: 正常運行
+- ✅ **後端**: Fastify + TypeScript 部署於 Render
+  - URL: https://shopline-middleware-platform.onrender.com
+  - 狀態: 正常運行，健康檢查通過
+- ✅ **資料庫**: PostgreSQL 部署於 Render
+  - 狀態: 已遷移，Prisma schema 已推送
+- ✅ **快取**: Redis 部署於 Render
+  - 狀態: 已設定
 
-**Phase R2 準備中**: Shopline Source Connector (預計 3 天)
-- 雙寫模式
-- 不影響現有功能
+#### 技術架構
+- ✅ **前端**: Next.js + TypeScript (Vercel)
+- ✅ **後端**: Fastify + TypeScript (Render)
+- ✅ **資料庫**: PostgreSQL + Prisma ORM (Render)
+- ✅ **快取**: Redis (Render)
+- ✅ **認證**: 準備實作 JWT + Shopline OAuth
 
-詳見: [Phase R1 完成報告](./docs/status/PHASE_R1_COMPLETION_REPORT.md)
+### 下一步：MVP 功能開發
+**準備開始實作**:
+- 🔄 Admin 首頁 - Event 監測和 Connector 管理
+- 🔄 Shopline 連接器 - OAuth 授權流程
+- 🔄 Webhook 管理 - 事件接收和處理
+- 🔄 API 測試區塊 - 測試 Shopline API
 
 ---
 
@@ -129,44 +138,46 @@ open http://localhost:3000/event-monitor
                           ngrok tunnel
 ```
 
-### Vercel 生產環境
+### 生產環境 (前後端分離)
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   前端 UI      │    │ Vercel Functions │    │  Prisma Postgres │
-│  (靜態託管)     │◄──►│  (Serverless)   │◄──►│   (雲端資料庫)   │
+│   前端 UI      │    │   後端 API     │    │  PostgreSQL DB  │
+│  (Next.js)     │◄──►│  (Fastify)     │◄──►│   (Render)      │
+│  (Vercel)      │    │  (Render)      │    │   + Redis       │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
 ## 🔑 核心功能
 
-- ✅ **OAuth 2.0 授權流程** - 完整的 SHOPLINE 標準流程
-- ✅ **HMAC-SHA256 簽名驗證** - 符合 SHOPLINE 安全標準
-- ✅ **Token 持久化儲存** - PostgreSQL 資料庫（Prisma Postgres）
-- ✅ **前端 UI 管理** - 完整的用戶界面
-- ✅ **API 測試功能** - 商店資訊、商品查詢、商品建立（含動態 handle 生成）；訂單列為下一 Sprint
-- ✅ **本地開發環境** - ngrok 隧道支援
-- ✅ **Vercel 雲端部署** - Serverless Functions + Prisma Postgres
+### ✅ 已完成 (里程碑 1)
+- ✅ **前後端分離架構** - Next.js + Fastify 分離部署
+- ✅ **Vercel 前端部署** - 靜態託管 + 環境變數配置
+- ✅ **Render 後端部署** - Web Service + PostgreSQL + Redis
+- ✅ **資料庫遷移** - Prisma schema 推送完成
+- ✅ **健康檢查** - 前後端連接測試通過
+- ✅ **基礎 API 架構** - 準備擴展功能
+
+### 🔄 準備開發 (MVP 功能)
+- 🔄 **Admin 首頁** - Event 監測和 Connector 管理
+- 🔄 **Shopline OAuth 2.0** - 授權流程和 Token 管理
+- 🔄 **Webhook 管理** - 事件接收和處理
+- 🔄 **API 測試區塊** - Shopline API 測試功能
 
 ## 📋 API 端點
 
-### OAuth 端點 (運作中)
-- `GET /oauth/install` - 啟動授權流程
-- `GET /oauth/callback` - 授權回調
-- `POST /oauth/refresh` - 刷新 Token
-- `POST /oauth/revoke` - 撤銷授權
+### ✅ 當前可用 (基礎架構)
+- `GET /health` - 健康檢查 (後端)
+- `GET /api/status` - API 狀態 (後端)
+- `GET /` - 前端 UI (Vercel)
 
-### Shopline API 測試 (運作中)
-- `GET /api/test/shop` - 商店資訊查詢
-- `GET /api/test/products` - 商品列表查詢
-- `POST /api/test/products` - 商品建立
-- `POST /api/test/orders/create` - 訂單建立
-- `GET /api/test/orders/list` - 訂單列表查詢
-- `GET /api/test/orders/:id` - 訂單詳情查詢
-- `PUT /api/test/orders/:id` - 訂單更新
-
-### 系統端點
-- `GET /health` - 健康檢查
-- `GET /` - 前端 UI
+### 🔄 準備開發 (MVP 功能)
+- `GET /api/auth/shopline` - Shopline OAuth 授權
+- `GET /api/auth/shopline/callback` - OAuth 回調
+- `GET /api/connectors/shopline` - Shopline 連接器管理
+- `POST /api/connectors/shopline/test` - API 測試
+- `POST /api/webhooks/shopline` - Webhook 接收
+- `GET /api/events` - 事件列表
+- `GET /api/events/stats` - 事件統計
 
 ## 🤖 Agent 資訊查找
 
@@ -251,8 +262,9 @@ tail -f logs/error.log
 
 ---
 
-**版本**: 3.0.0 (Event-Driven 架構)  
-**最後更新**: 2025-10-23  
-**狀態**: ✅ Phase R1 完成，Phase R2 準備中  
-**正式網址**: https://shopline-custom-app.vercel.app  
+**版本**: 4.0.0 (前後端分離架構)  
+**最後更新**: 2025-10-29  
+**狀態**: ✅ 里程碑 1 完成，MVP 功能開發準備中  
+**前端網址**: https://shopline-middleware-platform.vercel.app  
+**後端網址**: https://shopline-middleware-platform.onrender.com  
 **文件中心**: [docs/README.md](./docs/README.md)
